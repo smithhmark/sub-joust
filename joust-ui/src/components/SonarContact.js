@@ -1,8 +1,9 @@
 import React from 'react';
+import Hostility from './Hostility';
 
 export default function SonarContact(
   {contact: {id, sname, threat, selection, status, dlu, dfe}, onSelectContact, onContactArchived}) {
-  let styl = `${threat}-contact`;
+  let styl = `${threat.toLowerCase()}-contact`;
   return (
     <tr className="sonar-contact contact">
       <td>
@@ -18,12 +19,12 @@ export default function SonarContact(
       </td>
       <td>
       <div className="Title">
-        <span className="contact-name {styl}">{sname}</span>
+        <span className={"contact-name " +styl}>{sname}</span>
       </div>
       </td>
       <td>
         <div className="Title">
-          <span className="contact-class">{threat}</span>
+          <Hostility threat={threat} />
         </div>
       </td>
       <td>
