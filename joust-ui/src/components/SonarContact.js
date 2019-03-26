@@ -1,9 +1,54 @@
 import React from 'react';
 
-export default function SonarContact({contact: {id, sname, cls, state}, onSelectContact}) {
-  return (<div className="sonar-contact contact">
-    <span className="contact-name">{sname}</span>
-    <span className="contact-state">{state}</span>
-    <span className="contact-class">{cls}</span>
-    </div>);
+export default function SonarContact(
+  {contact: {id, sname, threat, selection, status, dlu, dfe}, onSelectContact, onContactArchived}) {
+  let styl = `${threat}-contact`;
+  return (
+    <tr className="sonar-contact contact">
+      <td>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          defaultChecked={selection === 'CONTACT_SELECTED'}
+          disabled={true}
+          name="selected"
+        />
+        <span className="checkbox-custom" onClick={() => onSelectContact(id)} />
+      </label>
+      </td>
+      <td>
+      <div className="Title">
+        <span className="contact-name {styl}">{sname}</span>
+      </div>
+      </td>
+      <td>
+        <div className="Title">
+          <span className="contact-class">{threat}</span>
+        </div>
+      </td>
+      <td>
+        <div className="Title {styl}">
+          <span className="contact-dlu">{dlu.toLocaleDateString()}</span>
+        </div>
+      </td>
+      <td>
+        <div className="Title {styl}">
+          <span className="contact-dfe">{dfe.toLocaleDateString()}</span>
+        </div>
+      </td>
+      <td>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            defaultChecked={status === 'CONTACT_ARCHIVED'}
+            //disabled={true}
+            name="archived"
+          />
+          <span className="checkbox-custom" onClick={() => onSelectContact(id)} />
+        </label>
+        <div>
+          <span>{}</span>
+        </div>
+      </td>
+    </tr>);
 }
