@@ -8,11 +8,12 @@ export const threat_levels = {
 }
 const optionHelper = function(threat, level) {
   let val = level[0] + level.slice(1).toLowerCase();
+  let cls = `${level.toLowerCase()}-contact`;
 
   if (threat === level) {
-    return <option value={level} selected>{val}</option>;
+    return <option className={cls} value={level} selected>{val}</option>;
   } else {
-    return <option value={level}>{val}</option>;
+    return <option className={cls} value={level}>{val}</option>;
   }
 }
 export default function Hostility( {threat, fixed, onHostilityChanged}) {
