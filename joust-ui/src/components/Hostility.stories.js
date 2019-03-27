@@ -23,7 +23,7 @@ export const unknown = {
 }
 
 export const actions = {
-  onHostilityChanged: action('onHostilityChange'),
+  onHostilityChanged: action('onHostilityChanged'),
 };
 
 storiesOf('Hostility', module)
