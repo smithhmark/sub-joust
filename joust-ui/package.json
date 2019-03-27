@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "core-js": "^3.0.0",
+    "fsevents": "^1.2.7",
+    "node-gyp": "^3.8.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8"
