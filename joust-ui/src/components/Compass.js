@@ -24,7 +24,7 @@ const TickMark = function({frame, circ, howMany, whichisThis, leng}) {
 
   //console.log(`<line x1=${ix} y1=${iy} x2=${ox} y2=${oy}`)
   return (
-    <line x1={ix} y1={iy} x2={ox} y2={oy} stroke="green" stroke-width="2" />
+    <line x1={ix} y1={iy} x2={ox} y2={oy} stroke="green" strokeWidth="2" />
   );
 }
 
@@ -57,7 +57,7 @@ const Indicator = function({frame, circ, angle, baseWidth}) {
   console.log("right wing point, x:", rWingX, "y:", rWingY);
 
   let ptStr = `${frontX},${frontY} ${rWingX},${rWingY} ${lWingX},${lWingY}`;
-  return ( <polygon points={ptStr} stroke="green" stroke-width="2" />);
+  return ( <polygon points={ptStr} stroke="green" strokeWidth="2" />);
 }
 
 const drawRose = function(width, height, heading) {
@@ -85,13 +85,12 @@ const drawRose = function(width, height, heading) {
       tickLengths.push(baseTickLen);
     }
   }
-           //stroke="green" stroke-width="4" fill="yellow" />
   return (
     <svg style={{background: "black"}} width={width} height={height}>
         <circle cx={centX} cy={centY} r={radius} 
-           stroke="green" stroke-width="2" />
+           stroke="green" strokeWidth="2" />
         {
-          tickLengths.map((l,i) => {return <TickMark frame={frame} circ={circ} howMany={tickCount} whichisThis={i} leng={l} />})
+          tickLengths.map((l,i) => {return <TickMark key={i} frame={frame} circ={circ} howMany={tickCount} whichisThis={i} leng={l} />})
         }
         {<Indicator frame={frame} circ={circ} angle={headingAngle} baseWidth={wid}/>}
     </svg>
@@ -112,8 +111,8 @@ export default function Compass(
         {drawRose(200,200,heading)}
       </div>
       <div>
-        <span style={{"padding-left": "15%", "padding-right": "15%"}} className="lat">Latitude: {lat}</span>
-        <span style={{"padding-left": "15%", "padding-right": "15%"}} className="lon">Longitude: {lon}</span>
+        <span style={{paddingLeft: "15%", paddingRight: "15%"}} className="lat">Latitude: {lat}</span>
+        <span style={{paddingLeft: "15%", paddingRight: "15%"}} className="lon">Longitude: {lon}</span>
       </div>
     </div>);
 }
