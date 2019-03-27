@@ -2,7 +2,9 @@ import React from 'react';
 import Hostility from './Hostility';
 
 export default function SonarContact(
-  {contact: {id, sname, threat, selection, status, dlu, dfe}, onSelectContact, onContactArchived}) {
+  {contact: {id, sname, threat, selection, status, dlu, dfe},
+    onContactSelected,
+    onContactArchived}) {
   let styl = `${threat.toLowerCase()}-contact`;
   return (
     <tr className="sonar-contact contact">
@@ -11,10 +13,11 @@ export default function SonarContact(
         <input
           type="checkbox"
           defaultChecked={selection === 'CONTACT_SELECTED'}
-          disabled={true}
           name="selected"
+          onChange={() => {console.log("Change"); onContactSelected(id)}} />
+        <span className="checkbox-custom"
+          onClick={() => {console.log("click"); onContactSelected(id)}}
         />
-        <span className="checkbox-custom" onClick={() => onSelectContact(id)} />
       </label>
       </td>
       <td>
@@ -44,8 +47,9 @@ export default function SonarContact(
             defaultChecked={status === 'CONTACT_ARCHIVED'}
             //disabled={true}
             name="archived"
-          />
-          <span className="checkbox-custom" onClick={() => onSelectContact(id)} />
+            onChange={() => {console.log("Change"); onContactArchived(id)}} />
+          <span className="checkbox-custom"
+            onClick={() => {console.log("click"); onContactArchived(id)}} />
         </label>
         <div>
           <span>{}</span>
