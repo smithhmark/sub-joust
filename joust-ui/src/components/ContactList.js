@@ -4,7 +4,7 @@ import React from 'react';
 import SonarContact from './SonarContact';
 
 export default function ContactList(
-  {contacts, onContactArchived, onSelectContact}) {
+  {contacts, onContactArchived, onContactSelected}) {
   return (
     <div className="contact-list">
       <table>
@@ -14,7 +14,7 @@ export default function ContactList(
                 <SonarContact
                   contact={c}
                   onContactArchived={onContactArchived}
-                  onSelectContact={onSelectContact}/>)})
+                  onContactSelected={onContactSelected}/>)})
           }
         </tbody>
       </table>
