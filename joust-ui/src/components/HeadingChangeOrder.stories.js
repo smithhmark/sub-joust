@@ -11,10 +11,16 @@ export const dueSouthFromNullIsland = {
   lat: 0.0,
   lon: 0.0,
 }
+
+const maintainCourse = {
+  newHeading: 180,
+  rudderOrder: "RUDDER_AMIDSHIPS",
+};
+
 export const actions = {
   onNewCourse: action('onNewCourse'),
 };
 
 storiesOf('HeadingChangeOrder', module)
   .add('default', 
-    () => <HeadingChangeOrder heading={dueSouthFromNullIsland.heading} {...actions} />)
+    () => <HeadingChangeOrder newOrder={maintainCourse} {...actions} />)
