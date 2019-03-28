@@ -77,7 +77,7 @@ export default class Helm extends Component {
   }
 
   onNewCourse(freshOrder) {
-    console.log("Helm getting new course", newOrder);
+    console.log("Helm getting new course", freshOrder);
     let newState = {...this.state};
     let newOrder = {...freshOrder};
 
