@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import HeadingChangeOrder from './HeadingChangeOrder';
+import DepthChangeOrder from './DepthChangeOrder';
 
 export default class Helm extends Component {
   constructor(props) {
@@ -13,7 +14,24 @@ export default class Helm extends Component {
         newHeading: props.navStatus.heading,
         rudderOrder: "RUDDER_AMIDSHIPS",
       },
+      changeDepthOrder: {
+        newDepth: props.navStatus.depth,
+        diveOrder: "MAINTAIN_DEPTH",
+      },
     };
+  }
+
+  onNewDepth(freshOrder) {
+    console.log("Helm getting new depth", freshOrder);
+    let newState = {...this.state};
+    let newOrder = {...freshOrder};
+
+    if (newOrder.dpethOrder === "MAINTAIN_DEPTH"
+      && newOrder.dpethOrder !== this.state.changeHeadingOrder.dpethOrder) {
+      newOrder.newDpeth = this.props.navStatus.depth;
+    }
+    newState.changeDepthOrder = newOrder;
+    this.setState(newState);
   }
 
   onNewCourse(freshOrder) {
@@ -37,6 +55,9 @@ export default class Helm extends Component {
         <HeadingChangeOrder
           newOrder={this.state.changeHeadingOrder}
           onNewCourse={this.onNewCourse.bind(this)} />
+        <DepthChangeOrder
+          newOrder={this.state.changeDepthOrder}
+          onNewDepth={this.onNewDepth.bind(this)} />
       </div>
     );
   };
