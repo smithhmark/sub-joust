@@ -9,8 +9,6 @@ export default class Helm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cur: props.navStatus,
-      next: Object.assign({}, props.navStatus),
       changeHeadingOrder: {
         newHeading: props.navStatus.heading,
         rudderOrder: "RUDDER_AMIDSHIPS",
@@ -25,6 +23,36 @@ export default class Helm extends Component {
       },
     };
   }
+  componentDidMount() {
+    this.resetOrders();
+  }
+
+  submitOrders() {
+    let order = {
+      courseChange: this.state.changeHeadingOrder,
+      speedChange: this.state.changeThrottleOrder,
+      depthChange: this.state.changeThrottleOrder,
+    }
+    console.log("Helm issuing manuver order", order)
+  }
+
+  resetOrders() {
+    let newState = {
+      changeHeadingOrder: {
+        newHeading: this.props.navStatus.heading,
+        rudderOrder: "RUDDER_AMIDSHIPS",
+      },
+      changeDepthOrder: {
+        newDepth: this.props.navStatus.depth,
+        diveOrder: "MAINTAIN_DEPTH",
+      },
+      changeThrottleOrder: {
+        newSpeed: this.props.navStatus.spd,
+        throttleOrder: "THROTTLE_SET_SPEED",
+      },
+    };
+    this.setState(newState);
+  };
 
   onNewDepth(freshOrder) {
     console.log("Helm getting new depth", freshOrder);
@@ -76,7 +104,10 @@ export default class Helm extends Component {
           maxSpd={30}
           newOrder={this.state.changeThrottleOrder}
           onNewSpeed={this.onNewSpeed.bind(this)} />
+        <button onClick={this.resetOrders.bind(this)}>Reset Orders</button>
+        <button onClick={this.submitOrders.bind(this)}>Submit Orders</button>
       </div>
+
     );
   };
 }
