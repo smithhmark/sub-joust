@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import HeadingChangeOrder from './HeadingChangeOrder';
 import DepthChangeOrder from './DepthChangeOrder';
+import ThrottleOrder from './ThrottleOrder';
 
 export default class Helm extends Component {
   constructor(props) {
@@ -18,6 +19,10 @@ export default class Helm extends Component {
         newDepth: props.navStatus.depth,
         diveOrder: "MAINTAIN_DEPTH",
       },
+      changeThrottleOrder: {
+        newSpeed: props.navStatus.spd,
+        throttleOrder: "THROTTLE_SET_SPEED",
+      },
     };
   }
 
@@ -31,6 +36,15 @@ export default class Helm extends Component {
       newOrder.newDpeth = this.props.navStatus.depth;
     }
     newState.changeDepthOrder = newOrder;
+    this.setState(newState);
+  }
+
+  onNewSpeed(freshOrder) {
+    console.log("Helm getting new Speed", freshOrder);
+    let newState = {...this.state};
+    let newOrder = {...freshOrder};
+
+    newState.changeThrottleOrder = newOrder;
     this.setState(newState);
   }
 
@@ -58,6 +72,10 @@ export default class Helm extends Component {
         <DepthChangeOrder
           newOrder={this.state.changeDepthOrder}
           onNewDepth={this.onNewDepth.bind(this)} />
+        <ThrottleOrder
+          maxSpd={30}
+          newOrder={this.state.changeThrottleOrder}
+          onNewSpeed={this.onNewSpeed.bind(this)} />
       </div>
     );
   };
