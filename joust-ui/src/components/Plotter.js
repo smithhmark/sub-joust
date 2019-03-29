@@ -81,19 +81,9 @@ export default class Plotter extends Component {
     }
 
     return (
-      <div style={{height: "240px", width:"320px"}} ref={this.plotter_ref} className="plotter">
-        {JSON.stringify(this.props)}
+      <div style={{height: "240px", width:"320px", border:"5px solid lightblue"}} ref={this.plotter_ref} className="plotter">
         <div className="plot">
           <svg {...dims}>
-           <line x1={0} y1={0}
-                 x2={dims.width} y2={dims.height}
-                 stroke="green" strokeWidth="2" />
-           <line 
-                x1={dims.width}
-                y1={0}
-                x2={0}
-                y2={dims.height}
-                stroke="green" strokeWidth="2" />
           {bs ? bs.map(this.drawBearing.bind(this)): null}
           {ls ? ls.map(this.drawLeg.bind(this)): null}
           {this.ownShip()}
