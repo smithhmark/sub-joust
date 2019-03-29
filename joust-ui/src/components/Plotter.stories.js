@@ -105,3 +105,10 @@ storiesOf('Plotter', module)
             lowerRight={lowerRight}
             bearings={bearings}
           {...actions} />)
+  .add('North East, with multiple bearings and legs', 
+    () => <Plotter 
+            ownShip={NNEFromNullIsland}
+            {...littleWindow}
+            legs={legs}
+            bearings={bearings}
+          {...actions} />)
