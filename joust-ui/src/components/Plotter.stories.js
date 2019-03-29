@@ -25,10 +25,29 @@ export const NNEFromNullIsland = {
 const upperLeft = {lat: 10.0, lon: -10.0}
 const lowerRight = {lat: -10.0, lon: 10.0}
 
+const bigWindow = {
+  upperLeft,
+  lowerRight,
+}
+
+const littleWindow = {
+  upperLeft:{lat: 3.0, lon: -3.0},
+  lowerRight:{lat: -3.0, lon: 3.0},
+}
+
 export const actions = {
   onSelectContact: action('SelectContact'),
   onSelectLeg: action('selectLeg'),
 };
+
+export const legs = [
+  { start: {lat:-1, lon:-1, time:"hmmm"},
+    end: null,
+  },
+  { start: {lat:0, lon:-2, time:"hmmm"},
+    end: {lat:-1, lon:-1, time:"hmmm"},
+  },
+];
 
 export const bearings = [
   { loc: {lat: 0, lon:0},
@@ -50,11 +69,15 @@ export const bearings = [
 
 
 storiesOf('Plotter', module)
-  .add('default', 
+  .add('default, big window', 
     () => <Plotter 
             ownShip={dueSouthFromNullIsland}
-            upperLeft={upperLeft}
-            lowerRight={lowerRight}
+            {...bigWindow}
+          {...actions} />) 
+  .add('default, little window', 
+    () => <Plotter 
+            ownShip={dueSouthFromNullIsland}
+            {...littleWindow}
           {...actions} />) 
   .add('North East', 
     () => <Plotter 
@@ -62,12 +85,18 @@ storiesOf('Plotter', module)
             upperLeft={upperLeft}
             lowerRight={lowerRight}
           {...actions} />)
+  .add('North East, with legs', 
+    () => <Plotter 
+            ownShip={NNEFromNullIsland}
+            {...littleWindow}
+            legs={legs}
+          {...actions} />)
   .add('North East, with single bearing', 
     () => <Plotter 
             ownShip={NNEFromNullIsland}
             upperLeft={upperLeft}
             lowerRight={lowerRight}
-            bearings={bearings}
+            bearings={[bearings[0]]}
           {...actions} />)
   .add('North East, with multiple bearings', 
     () => <Plotter 

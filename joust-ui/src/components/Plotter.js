@@ -69,6 +69,8 @@ export default class Plotter extends Component {
 
   render() {
     const bs = this.props.bearings;
+    const ls = this.props.legs;
+    console.log("legs", ls);
     const dims = {};
     if (this.plotter_ref.current) {
       dims.width= this.plotter_ref.current.clientWidth;
@@ -93,10 +95,28 @@ export default class Plotter extends Component {
                 y2={dims.height}
                 stroke="green" strokeWidth="2" />
           {bs ? bs.map(this.drawBearing.bind(this)): null}
+          {ls ? ls.map(this.drawLeg.bind(this)): null}
           {this.ownShip()}
           </svg>
         </div>
       </div>);
+  }
+
+  drawLeg(leg) {
+    const { start, end} = leg;
+    const origin = this.pixelPos(start);
+    let dest;
+    if (end){
+      dest = this.pixelPos(end);
+    } else {
+      dest = this.pixelPos(this.props.ownShip);
+    }
+    return (
+      <line x1={origin.x} y1={origin.y}
+        x2={dest.x} y2={dest.y}
+        stroke="grey"
+        strokeWidth="2"
+      />);
   }
 
   drawBearing(br) {
