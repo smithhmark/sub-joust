@@ -8,7 +8,7 @@ import { sierraOne, actions } from './SonarContact.stories';
 const sierraTwo = {...sierraOne, id:'2', sname:'Sierra 2', threat:"UNKNOWN"};
 const sierraThree = {...sierraOne, id:'3', sname:'Sierra 3', threat:"FRIENDLY"};
 
-const simpleContacts = [
+export const simpleContacts = [
   sierraOne, sierraTwo, sierraThree
 ];
 
