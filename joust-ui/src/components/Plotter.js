@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-const METERS_PER_DEG = 111111;
-
 export default class Plotter extends Component {
   constructor(props) {
     super(props);
@@ -70,6 +68,7 @@ export default class Plotter extends Component {
   }
 
   render() {
+    const bs = this.props.bearings;
     const dims = {};
     if (this.plotter_ref.current) {
       dims.width= this.plotter_ref.current.clientWidth;
@@ -93,10 +92,26 @@ export default class Plotter extends Component {
                 x2={0}
                 y2={dims.height}
                 stroke="green" strokeWidth="2" />
+          {bs ? bs.map(this.drawBearing.bind(this)): null}
           {this.ownShip()}
           </svg>
         </div>
       </div>);
+  }
+
+  drawBearing(br) {
+    const { loc, bearing} = br;
+    const origin = this.pixelPos(loc);
+    const angle = Math.PI * bearing/180 - Math.PI /2;
+    const end = {
+      x: origin.x + Math.cos(angle)*this.extent.x,
+      y: origin.x + Math.sin(angle)*this.extent.y,
+    };
+    return (
+      <line x1={origin.x} y1={origin.y}
+        x2={end.x} y2={end.y}
+        stroke="blue"
+      />);
   }
 
   ownShip() {
