@@ -34,6 +34,9 @@ export default class Helm extends Component {
       depthChange: this.state.changeThrottleOrder,
     }
     console.log("Helm issuing manuver order", order)
+    if (this.props.issueOrder){
+      issueOrder(order);
+    }
   }
 
   resetOrders() {
