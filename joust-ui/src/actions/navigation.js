@@ -1,4 +1,4 @@
-const ISSUE_MANUVER_ORDER = "ISSUE_MANUVER_ORDER";
+export const ISSUE_MANUVER_ORDER = "ISSUE_MANUVER_ORDER";
 
 export function issueManuverOrder(order) {
   return {
