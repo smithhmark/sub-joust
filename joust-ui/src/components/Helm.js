@@ -31,11 +31,11 @@ export default class Helm extends Component {
     let order = {
       courseChange: this.state.changeHeadingOrder,
       speedChange: this.state.changeThrottleOrder,
-      depthChange: this.state.changeThrottleOrder,
+      depthChange: this.state.changeDepthOrder,
     }
     console.log("Helm issuing manuver order", order)
     if (this.props.issueOrder){
-      issueOrder(order);
+      this.props.issueOrder(order);
     }
   }
 
@@ -96,6 +96,7 @@ export default class Helm extends Component {
     let {navStatus, onManuverOrder} = this.props;
     return (
       <div className="helm-component">
+        {JSON.stringify(this.props)}
         {this.props.currentManuver 
           ? JSON.stringify(this.props.currentManuver):null}
         <HeadingChangeOrder
