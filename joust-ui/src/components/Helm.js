@@ -96,7 +96,8 @@ export default class Helm extends Component {
     let {navStatus, onManuverOrder} = this.props;
     return (
       <div className="helm-component">
-        {JSON.stringify(navStatus)}
+        {this.props.currentManuver 
+          ? JSON.stringify(this.props.currentManuver):null}
         <HeadingChangeOrder
           newOrder={this.state.changeHeadingOrder}
           onNewCourse={this.onNewCourse.bind(this)} />
