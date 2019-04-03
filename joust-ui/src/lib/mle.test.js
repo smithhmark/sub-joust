@@ -114,3 +114,13 @@ describe("calculating bearing errors one at a time", () => {
     });
   });
 });
+
+describe("calculating summ of errors squared", () => {
+  test('perfect tracker over all bearings', () => {
+    expect(sumSqrError(perfectTarget, perfectBearings)).toBeCloseTo(0);
+  });
+  test('flawed tracker over all bearings', () => {
+    let expected = 9772.052206; // from spreadsheet
+    expect(sumSqrError(flawedTracker, perfectBearings)).toBeCloseTo(expected);
+  });
+});
