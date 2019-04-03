@@ -69,53 +69,61 @@ test('can make a position', () => {
   //expect(mle.mkPos(1,2)).toEqual({x:1,y:2});
 });
 
-test('convert compass angle 0deg', () => {
-  expect(compassToMath(0)).toBe(90);
-  expect(Math.cos(toRad(compassToMath(0)))).toBeCloseTo(0);
-  expect(Math.sin(toRad(compassToMath(0)))).toBeCloseTo(1);
-});
-test('convert compass angle 90deg', () => {
-  expect(compassToMath(90)).toBeCloseTo(0);
-  expect(Math.cos(toRad(compassToMath(90)))).toBeCloseTo(1);
-  expect(Math.sin(toRad(compassToMath(90)))).toBeCloseTo(0);
-});
-test('convert compass angle 270deg', () => {
-  expect(compassToMath(270)).toBe(180);
+describe("converting frames of reference", () => {
+  describe("from compass angles to math", () => {
+    test('convert compass angle 0deg', () => {
+      expect(compassToMath(0)).toBe(90);
+      expect(Math.cos(toRad(compassToMath(0)))).toBeCloseTo(0);
+      expect(Math.sin(toRad(compassToMath(0)))).toBeCloseTo(1);
+    });
+    test('convert compass angle 90deg', () => {
+      expect(compassToMath(90)).toBeCloseTo(0);
+      expect(Math.cos(toRad(compassToMath(90)))).toBeCloseTo(1);
+      expect(Math.sin(toRad(compassToMath(90)))).toBeCloseTo(0);
+    });
+    test('convert compass angle 270deg', () => {
+      expect(compassToMath(270)).toBe(180);
+    });
+  });
+  describe("from compass angles to math", () => {
+    test('convert math angle 0deg', () => {
+      expect(mathToCompass(0)).toBe(90);
+    });
+    test('convert math angle 45deg', () => {
+      expect(mathToCompass(45)).toBe(45);
+    });
+    test('convert math angle -45deg', () => {
+      expect(mathToCompass(-45)).toBe(135);
+    });
+    test('convert math angle 315deg', () => {
+      expect(mathToCompass(315)).toBe(135);
+    });
+    test('convert math angle 90deg', () => {
+      expect(mathToCompass(90)).toBe(0);
+    });
+    test('convert math angle 270', () => {
+      expect(mathToCompass(270)).toBe(180);
+    });
+  });
 });
 
-test('convert math angle 0deg', () => {
-  expect(mathToCompass(0)).toBe(90);
-});
-test('convert math angle 45deg', () => {
-  expect(mathToCompass(45)).toBe(45);
-});
-test('convert math angle -45deg', () => {
-  expect(mathToCompass(-45)).toBe(135);
-});
-test('convert math angle 315deg', () => {
-  expect(mathToCompass(315)).toBe(135);
-});
-test('convert math angle 90deg', () => {
-  expect(mathToCompass(90)).toBe(0);
-});
-test('convert math angle 270', () => {
-  expect(mathToCompass(270)).toBe(180);
+describe("Making velocities", () => {
+  it('make a velocity North', () => {
+    let crs = 0, spd = 5;
+    let exp = {vx:0,vy:5};
+    expect(mkVel(crs,spd)).toMatchCloseTo(exp);
+  });
+  it('make a velocity East', () => {
+    let crs = 90, spd = 5;
+    expect(mkVel(crs,spd)).toMatchCloseTo({vx:5,vy:0});
+  });
+  it('make a velocity South', () => {
+    let crs = 180, spd = 5;
+    expect(mkVel(crs,spd)).toMatchCloseTo({vx:0,vy:-5});
+  });
+  it('make a velocity West', () => {
+    let crs = 270, spd = 5;
+    expect(mkVel(crs,spd)).toMatchCloseTo({vx:-5,vy:0});
+  });
 });
 
-test('make a velocity North', () => {
-  let crs = 0, spd = 5;
-  let exp = {vx:0,vy:5};
-  expect(mkVel(crs,spd)).toMatchCloseTo(exp);
-});
-test('make a velocity East', () => {
-  let crs = 90, spd = 5;
-  expect(mkVel(crs,spd)).toMatchCloseTo({vx:5,vy:0});
-});
-test('make a velocity South', () => {
-  let crs = 180, spd = 5;
-  expect(mkVel(crs,spd)).toMatchCloseTo({vx:0,vy:-5});
-});
-test('make a velocity West', () => {
-  let crs = 270, spd = 5;
-  expect(mkVel(crs,spd)).toMatchCloseTo({vx:-5,vy:0});
-});
