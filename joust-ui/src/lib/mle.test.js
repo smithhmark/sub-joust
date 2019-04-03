@@ -1,25 +1,28 @@
 
 //const mle = require('./mle');
 import {
-  compassToMath,
-  mathToCompass,
-  mkPos,
-  mkVel,
-  toRad,
-  toDeg,
+  singleError,
+  sumSqrError,
 } from './mle';
 
-const makeBearing = (lat, lon, ang, tm) => {
+import {
+  mkPos,
+  mkVel,
+  initEst,
+} from './geom';
+
+const makeBearing = (x, y, ang, tm) => {
   return ({
-    pos: {
-      lat:lat,
-      lon:lon},
+    pos: mkPos(x, y),
     bearing: ang,
     time: tm
   });
 }
 
-const bearings =[
+const perfectTarget = initEst(mkPos(0,10),mkVel(90,2),0);
+const flawedTracker = initEst(mkPos(0,10), mkVel(90,2.5),0);
+
+const perfectBearings =[
   makeBearing(8,2,315,0),
   makeBearing(9,2.5,316.974934,1),
   makeBearing(10,3,319.3987054,2),
@@ -38,16 +41,18 @@ const bearings =[
 
 expect.extend({
   toMatchCloseTo(received, expected) {
-    for (const kk in expected) {
+    for (let kk in expected) {
       if (!received.hasOwnProperty(kk)) {
+        //console.log("missing prop:",kk);
         return {
           message: () =>
-            `expected ${received} to have attribute: ${kk}`,
+            `expected ${JSON.stringify(received)} to have attribute: ${kk}`,
           pass: false,
         };
       } else {
         let err = expected[kk] - received[kk];
         if (err > 0.000001) {
+          //console.log("has prop but off:",kk, err);
           return {
             message: () =>
               `expected ${received}.${kk} to be close to ${expected[kk]}`,
@@ -64,66 +69,48 @@ expect.extend({
   },
 });
 
-test('can make a position', () => {
-  expect(mkPos(1,2)).toEqual({x:1,y:2});
-  //expect(mle.mkPos(1,2)).toEqual({x:1,y:2});
-});
 
-describe("converting frames of reference", () => {
-  describe("from compass angles to math", () => {
-    test('convert compass angle 0deg', () => {
-      expect(compassToMath(0)).toBe(90);
-      expect(Math.cos(toRad(compassToMath(0)))).toBeCloseTo(0);
-      expect(Math.sin(toRad(compassToMath(0)))).toBeCloseTo(1);
+describe("calculating bearing errors one at a time", () => {
+  describe("zero error", () => {
+    test('at t0', () => {
+      let ob = perfectBearings[0];
+      expect(singleError(perfectTarget, ob)).toBeCloseTo(0);
     });
-    test('convert compass angle 90deg', () => {
-      expect(compassToMath(90)).toBeCloseTo(0);
-      expect(Math.cos(toRad(compassToMath(90)))).toBeCloseTo(1);
-      expect(Math.sin(toRad(compassToMath(90)))).toBeCloseTo(0);
+    test('at t1', () => {
+      let ob = perfectBearings[1];
+      expect(singleError(perfectTarget, ob)).toBeCloseTo(0);
     });
-    test('convert compass angle 270deg', () => {
-      expect(compassToMath(270)).toBe(180);
-    });
-  });
-  describe("from compass angles to math", () => {
-    test('convert math angle 0deg', () => {
-      expect(mathToCompass(0)).toBe(90);
-    });
-    test('convert math angle 45deg', () => {
-      expect(mathToCompass(45)).toBe(45);
-    });
-    test('convert math angle -45deg', () => {
-      expect(mathToCompass(-45)).toBe(135);
-    });
-    test('convert math angle 315deg', () => {
-      expect(mathToCompass(315)).toBe(135);
-    });
-    test('convert math angle 90deg', () => {
-      expect(mathToCompass(90)).toBe(0);
-    });
-    test('convert math angle 270', () => {
-      expect(mathToCompass(270)).toBe(180);
+    test('over the whole run', () => {
+      let last = 0
+      for (let ob of perfectBearings) {
+        expect(singleError(perfectTarget, ob)).toBeCloseTo(0);
+        expect(singleError(perfectTarget, ob)).toBeCloseTo(last);
+        last = singleError(perfectTarget, ob);
+      }
     });
   });
-});
-
-describe("Making velocities", () => {
-  it('make a velocity North', () => {
-    let crs = 0, spd = 5;
-    let exp = {vx:0,vy:5};
-    expect(mkVel(crs,spd)).toMatchCloseTo(exp);
-  });
-  it('make a velocity East', () => {
-    let crs = 90, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:5,vy:0});
-  });
-  it('make a velocity South', () => {
-    let crs = 180, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:0,vy:-5});
-  });
-  it('make a velocity West', () => {
-    let crs = 270, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:-5,vy:0});
+  describe("increasing errors", () => {
+    test('at t0', () => {
+      let ob = perfectBearings[0];
+      expect(singleError(flawedTracker, ob)).toBeCloseTo(0);
+    });
+    test('at t1', () => {
+      let ob = perfectBearings[0];
+      //console.log("the err:", singleError(flawedTracker, ob))
+      expect(singleError(flawedTracker, ob)).toBeCloseTo(0);
+    });
+    test('over a swath', () => {
+      let last = 0
+      let ii = 0;
+      expect(singleError(flawedTracker, perfectBearings[ii]))
+        .toBeCloseTo(0);
+      last = singleError(flawedTracker, perfectBearings[ii]);
+      for (ii = 1; ii < 9; ii++) { // errors start to decrease again...
+        //console.log(ii, last);
+        expect(singleError(flawedTracker, perfectBearings[ii]))
+          .toBeGreaterThan(last);
+        last = singleError(flawedTracker, perfectBearings[ii]);
+      }
+    });
   });
 });
-
