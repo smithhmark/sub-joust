@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ThrottleOrderType } from '../types/index';
 
 const throttle_positions = [
   "THROTTLE_REVERSE_ONE_THIRD",
@@ -107,3 +108,8 @@ export default class ThrottleOrder extends React.Component {
     </span>);
   }
 }
+
+ThrottleOrder.propTypes = {
+  newOrder: ThrottleOrderType,
+  onManuverOrder: PropTypes.func,
+};

@@ -5,6 +5,8 @@ import HeadingChangeOrder from './HeadingChangeOrder';
 import DepthChangeOrder from './DepthChangeOrder';
 import ThrottleOrder from './ThrottleOrder';
 
+import {NavStatusType} from '../types/index';
+
 export default class Helm extends Component {
   constructor(props) {
     super(props);
@@ -118,13 +120,7 @@ export default class Helm extends Component {
 }
 
 Helm.propTypes = {
-  navStatus: PropTypes.shape({
-    heading: PropTypes.number.isRequired, 
-    depth: PropTypes.number.isRequired, 
-    spd: PropTypes.number.isRequired, 
-    lat: PropTypes.number.isRequired, 
-    lon: PropTypes.number.isRequired,
-  }),
+  navStatus: NavStatusType,
   onManuverOrder: PropTypes.func,
 };
 

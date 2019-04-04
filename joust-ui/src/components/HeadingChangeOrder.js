@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { HeadingChangeOrderType } from '../types/index';
 
 const rudderPositions = [
   "RUDDER_LEFT_FULL",
@@ -81,3 +82,7 @@ export default class HeadingChangeOrder extends React.Component {
   };
 }
 
+HeadingChangeOrder.propTypes = {
+  newOrder: HeadingChangeOrderType,
+  onNewCourse: PropTypes.func,
+}

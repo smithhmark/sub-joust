@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hostility from './Hostility';
+import { SensorContactType } from '../types/index';
 
 export default function SonarContact(
   {contact: {id, sname, threat, selection, status, dlu, dfe},
@@ -61,15 +62,7 @@ export default function SonarContact(
 }
 
 SonarContact.propTypes = {
-  contact: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    sname: PropTypes.string.isRequired,
-    threat: PropTypes.string.isRequired,
-    selection: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    //dfe: PropTypes.date.isRequired,
-    //dlu: PropTypes.date.isRequired,
-  }),
+  contact: SensorContactType,
   onContactSelected: PropTypes.func,
   onContactArchived: PropTypes.func,
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {DepthChangeOrderType} from '../types/index';
 
 const dive_rates = [
   "DIVE_FULL",
@@ -74,3 +75,9 @@ export default class DepthChangeOrder extends React.Component {
     </span>);
   }
 }
+
+DepthChangeOrder.propTypes = {
+  newOrder: DepthChangeOrderType,
+  onNewDepth: PropTypes.func,
+}
+
