@@ -43,7 +43,7 @@ const sortHelper = (a, b) =>{
 }
 
 export const stepwiseDescent = (fn, startingArgs, domain, steps) => {
-  let best = fn(startingArgs);
+  let best = fn(...startingArgs);
   let bestArgs = startingArgs;
   let neighbors;
   let step;
@@ -56,6 +56,7 @@ export const stepwiseDescent = (fn, startingArgs, domain, steps) => {
     }
     results.sort(sortHelper);
     //console.log("best of round:", results[0]);
+    //console.log("best:", best);
     //console.log("round:", results);
     if (results[0][0] < best) {
       best = results[0][0];
