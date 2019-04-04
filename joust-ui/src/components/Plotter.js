@@ -12,8 +12,8 @@ export default class Plotter extends Component {
   }
 
   onPlot(pt){
-    console.log("is",pt, "inside window?");
-    console.log("have extent?",this.extent);
+    //console.log("is",pt, "inside window?");
+    //console.log("have extent?",this.extent);
     if (pt.x >= this.basis.x && pt.x <= this.extent.x) {
       if (pt.y >= this.basis.y && pt.y <= this.extent.y) {
         return true;
@@ -23,7 +23,7 @@ export default class Plotter extends Component {
   }
 
   inside(geoCoord){
-    console.log("is", geoCoord, "inside window?");
+    //console.log("is", geoCoord, "inside window?");
     if (geoCoord.lon > this.props.upperLeft.lon 
       && geoCoord.lon < this.props.lowerRight.lon) {
       console.log("lon bounded by window");
@@ -70,7 +70,7 @@ export default class Plotter extends Component {
   render() {
     const bs = this.props.bearings;
     const ls = this.props.legs;
-    console.log("legs", ls);
+    //console.log("legs", ls);
     const dims = {};
     if (this.plotter_ref.current) {
       dims.width= this.plotter_ref.current.clientWidth;
@@ -127,8 +127,8 @@ export default class Plotter extends Component {
   ownShip() {
     const pos = this.pixelPos(this.props.ownShip)
     const ownShip = this.props.ownShip;
-    console.log("ownShip local:", pos);
-    console.log("ownShip:", ownShip);
+    //console.log("ownShip local:", pos);
+    //console.log("ownShip:", ownShip);
 
     if (this.onPlot(pos)){
       //const pos = this.toLocalPos(this.props.ownShip)
@@ -144,15 +144,15 @@ export default class Plotter extends Component {
 
   pixelPos(geoCoord) {
     let temp= this.projectedXY(geoCoord);
-    console.log("pixelPos projecting to:", temp);
+    //console.log("pixelPos projecting to:", temp);
     temp.x = temp.x - this.basis.x;
     //temp.y = temp.y + this.basis.y;
     //temp.x = this.basis.x - temp.x;
     temp.y = this.basis.y - temp.y;
-    console.log("pixelPos translated to:", temp);
+    //console.log("pixelPos translated to:", temp);
     temp.x = temp.x * this.scale.x;
     temp.y = temp.y * this.scale.y;
-    console.log("pixelPos scaled to:", temp);
+    //console.log("pixelPos scaled to:", temp);
 
     return temp
   }
@@ -170,32 +170,32 @@ export default class Plotter extends Component {
     this.central.lon = 
       (this.props.upperLeft.lon + this.props.lowerRight.lon) / 2;
     this.skew = Math.cos(this.central.lat * Math.PI * 2);
-    console.log("skew is:", this.skew);
+    //console.log("skew is:", this.skew);
 
     this.basis = this.projectedXY(this.props.upperLeft);
-    console.log("set basis:", this.basis);
+    //console.log("set basis:", this.basis);
     this.extent = this.pixelPos(this.props.lowerRight);
-    console.log("set extent:", this.extent);
+    //console.log("set extent:", this.extent);
   }
 
   setScale(){
     const lr = this.projectedXY(this.props.lowerRight)
     const ul = this.projectedXY(this.props.upperLeft)
-    console.log("lr:",lr);
-    console.log("ul:",ul);
+    //console.log("lr:",lr);
+    //console.log("ul:",ul);
     this.scale.x = this.plotter_ref.current.clientWidth / Math.abs(lr.x-ul.x) ;
     //this.scale.x = Math.abs(lr.x-ul.x) / this.plotter_ref.current.clientWidth;
-    console.log("xscale:", this.scale.x);
+    //console.log("xscale:", this.scale.x);
     this.scale.y =this.plotter_ref.current.clientHeight / Math.abs(ul.y-lr.y);
     //this.scale.y = Math.abs(ul.y-lr.y)/ this.plotter_ref.current.clientHeight;
-    console.log("yscale:", this.scale.y);
+    //console.log("yscale:", this.scale.y);
 
   }
 
   componentDidMount() {
-    console.log("ref value after mount:", this.plotter_ref);
+    //console.log("ref value after mount:", this.plotter_ref);
     this.setScale();
-    console.log("scale is:", this.scale);
+    //console.log("scale is:", this.scale);
     this.setProjection();
     this.forceUpdate();
   }

@@ -72,9 +72,9 @@ export const solve = (bearings, tries=5) => {
   }
   results.sort(sortHelper);
   //console.log("solve, results:", results);
-  results.slice(0,3).map(r => {
-    console.log("val:", r.val, "steps:",r.steps,  interp(r.args));
-  });
+  //results.slice(0,3).map(r => {
+  //  console.log("val:", r.val, "steps:",r.steps,  interp(r.args));
+  //});
   return initEst(mkPosRel(first.pos, first.bearing, results[0].args[0]),
     mkVel(results[0].args[1], results[0].args[2]), first.time);
 }
