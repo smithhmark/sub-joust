@@ -3,6 +3,7 @@
 import {
   singleError,
   sumSqrError,
+  solve,
 } from './mle';
 
 import {
@@ -124,3 +125,18 @@ describe("calculating summ of errors squared", () => {
     expect(sumSqrError(flawedTracker, perfectBearings)).toBeCloseTo(expected);
   });
 });
+
+describe("solving with a guess at initial state and linear descent", () => {
+  test('solving for an initEst ahhhh', () => {
+    let est = solve(perfectBearings, 100);
+    expect(est).toHaveProperty("A");
+    expect(est).toHaveProperty("A.x");
+    expect(est).toHaveProperty("A.y");
+    expect(est).toHaveProperty("V");
+    expect(est).toHaveProperty("V.vx");
+    expect(est).toHaveProperty("V.vy");
+    expect(est).toHaveProperty("t0", perfectBearings[0].time);
+  });
+});
+
+
