@@ -4,6 +4,7 @@ import {
   compassToMath,
   mathToCompass,
   mkPos,
+  mkPosRel,
   mkVel,
   toRad,
   toDeg,
@@ -107,6 +108,11 @@ describe("Making velocities", () => {
 describe("making positions and moving them", () => {
   it('can make a position', () => {
     expect(mkPos(1,2)).toEqual({x:1,y:2});
+  });
+
+  it('can make a relative position', () => {
+    expect(mkPosRel(mkPos(1,2), 0, 2)).toMatchCloseTo({x:1,y:4});
+    expect(mkPosRel(mkPos(1,2), 90, 2)).toMatchCloseTo({x:3,y:2});
   });
 
   it('makes a displacement East', () => {

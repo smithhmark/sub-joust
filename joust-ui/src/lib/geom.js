@@ -3,6 +3,17 @@ export const mkPos = (lat, lon) => {
   return { x:lat, y:lon}
 }
 
+export const mkPosRel = (pos, bearing, range) => {
+  let theta = toRad(compassToMath(bearing));
+  //console.log("mkPosRel, theta:", theta);
+  let disp = {dx: range * Math.cos(theta),
+    dy: range * Math.sin(theta),
+  };
+  //console.log("mkPosRel, disp:", disp);
+
+  return displace(pos, disp);
+}
+
 export const mathToCompass = (theta) => {
   return (90 - theta + 360) % 360;
 }
