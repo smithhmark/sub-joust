@@ -12,6 +12,12 @@ import {
   stepwiseDescent,
 } from './minimizer';
 
+const rndTo = (n, d) => {
+  //let shift = 10 ^ d;
+  //return Math.round(n * shift) / shift;
+  return n.toFixed(d);
+}
+
 export const singleError = (est, ob) => {
   let guessedLoc = posAtTime(est, ob.time);
   //console.log("singleError - guessedLoc:", guessedLoc);
@@ -36,6 +42,14 @@ export const sumSqrError = (est, obs) => {
   return sum;
 }
 
+const posToStr = (pos) => {
+  if (pos.z) {
+    return `x:${rndTo(pos.x,3)} y:${rndTo(pos.y,3)} y:${rndTo(pos.z,3)}`
+  } else {
+    return `x:${rndTo(pos.x,3)} y:${rndTo(pos.y,3)}`
+  }
+}
+
 export const solve = (bearings, tries=5) => {
   let results = [];
   const first = bearings[0];
@@ -50,14 +64,14 @@ export const solve = (bearings, tries=5) => {
     let pos = mkPosRel(first.pos, first.bearing, ir);
     let A = initEst(pos, vel, first.time);
     //console.log("solver, A:", A);
-
     return sumSqrError(A, bearings);
   };
+
   const interp = args => {
     let pos = mkPosRel(first.pos, first.bearing, args[0]);
     let crs = args[1];
     let spd = args[2];
-    return `${JSON.stringify(pos)} c: ${crs} s: ${spd}`
+    return `${posToStr(pos)} c:${rndTo(crs,2)} s:${rndTo(spd, 2)}`
   };
 
   const sortHelper = (a, b) =>{
@@ -73,8 +87,12 @@ export const solve = (bearings, tries=5) => {
   results.sort(sortHelper);
   //console.log("solve, results:", results);
   //results.slice(0,3).map(r => {
-  //  console.log("val:", r.val, "steps:",r.steps,  interp(r.args));
+    //console.log("val:", rndTo(r.val,1), "steps:",r.steps,  interp(r.args));
   //});
-  return initEst(mkPosRel(first.pos, first.bearing, results[0].args[0]),
+  let ret = initEst(mkPosRel(first.pos, first.bearing, results[0].args[0]),
     mkVel(results[0].args[1], results[0].args[2]), first.time);
+  ret.cost = results.reduce((tot,n)=>{return n.steps+tot},0);
+  ret.source = "MLE_AUTO";
+  //console.log("solution effort:",ret.cost);
+  return ret;
 }
