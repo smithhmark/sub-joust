@@ -114,3 +114,19 @@ export const angularDiff = (b1, b2) => {
   return temp;
 };
 
+export default {
+  angularDiff: angularDiff,
+  mkPos: mkPos,
+  mkPosRel: mkPosRel,
+  mathToCompass: mathToCompass,
+  compassToMath: compassToMath,
+  toRad: toRad,
+  toDeg: toDeg,
+  mkVel: mkVel,
+  initEst: initEst,
+  displacement: displacement,
+  displace: displace,
+  posAtTime: posAtTime,
+  angleBetween: angleBetween,
+  angularDiff: angularDiff,
+};
