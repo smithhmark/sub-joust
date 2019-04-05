@@ -12,6 +12,7 @@ import {
   displace,
   initEst,
   posAtTime,
+  posAfter,
   angleBetween,
   angularDiff,
 } from './geom';
@@ -147,6 +148,17 @@ describe("making positions and moving them", () => {
     expect(initEst(pos,vel,time)).toHaveProperty("V.dx", vel.dx);
     expect(initEst(pos,vel,time)).toHaveProperty("V.dy", vel.dy);
     expect(initEst(pos,vel,time)).toHaveProperty("t0", time);
+  });
+
+  it('can displace a pos based on a vel and a time', () => {
+    let vel = mkVel(180, 5);
+    let pos = mkPos(1, 2);
+    let expected = {
+      x: pos.x,
+      y: pos.y - 5,
+    };
+    let newPos = posAfter(pos, vel, 1);
+    expect(newPos).toMatchCloseTo(expected);
   });
 
   it('can make a new position from a tracker and a time', () => {

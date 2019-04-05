@@ -54,12 +54,15 @@ export const displace = (pos, disp) => {
   return mkPos(newX, newY);
 }
 
+export const posAfter = (pos, V, dt) => {
+  let disp = displacement(V, dt);
+  let p = displace(pos, disp);
+  return p;
+}
+
 export const posAtTime = (est, time) => {
   let dt = time - est.t0;
-  let disp = displacement(est.V, dt);
-  //console.log("disp:", disp);
-  let p = displace(est.A, disp);
-  //console.log("p:", p);
+  return posAfter(est.A, est.V, dt);
   return p;
 }
 
@@ -129,4 +132,5 @@ export default {
   posAtTime: posAtTime,
   angleBetween: angleBetween,
   angularDiff: angularDiff,
+  posAfter: posAfter,
 };
