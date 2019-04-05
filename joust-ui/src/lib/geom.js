@@ -14,12 +14,29 @@ export const mkPosRel = (pos, bearing, range) => {
   return displace(pos, disp);
 }
 
+export const dispMagnatude = disp => {
+  return Math.sqrt(disp.dx^2+disp.dy^2);
+}
+
 export const mathToCompass = (theta) => {
   return (90 - theta + 360) % 360;
 }
 
 export const compassToMath = (bearing) => {
   return (90 - bearing + 360) % 360;
+}
+
+export const bearingAdd = (b1, b2) => {
+  return (b1 + b2) % 360;
+}
+
+export const bearingMinus = (b1, b2) => {
+  let temp = b1 - b2;
+  if (temp < 0) {
+    return 360 + temp;
+  } else {
+    return temp;
+  }
 }
 
 export const toRad = (deg) => {return deg * Math.PI / 180}
@@ -31,7 +48,15 @@ export const mkVel = (crs, spd) => {
     vx: spd * Math.cos(angle),
     vy: spd * Math.sin(angle),
   });
-}
+};
+
+export const mkCrsSpd = vel => {
+  let p1 = mkPos(0,0);
+  let p2 = posAfter(p1, vel, 1);
+  let bearing = angleBetween(p2, p1);
+  let speed = Math.sqrt(vel.vx*vel.vx+vel.vy*vel.vy);
+  return {crs:bearing, spd: speed}
+};
 
 export const initEst = (pos, vel, time) => {
   return ({
@@ -118,6 +143,8 @@ export const angularDiff = (b1, b2) => {
 };
 
 export default {
+  bearingAdd: bearingAdd,
+  bearingMinus: bearingMinus,
   angularDiff: angularDiff,
   mkPos: mkPos,
   mkPosRel: mkPosRel,
@@ -126,6 +153,7 @@ export default {
   toRad: toRad,
   toDeg: toDeg,
   mkVel: mkVel,
+  mkCrsSpd: mkCrsSpd,
   initEst: initEst,
   displacement: displacement,
   displace: displace,
@@ -133,4 +161,5 @@ export default {
   angleBetween: angleBetween,
   angularDiff: angularDiff,
   posAfter: posAfter,
+  dispMagnatude: dispMagnatude,
 };

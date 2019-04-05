@@ -6,6 +6,7 @@ import {
   mkPos,
   mkPosRel,
   mkVel,
+  mkCrsSpd,
   toRad,
   toDeg,
   displacement,
@@ -18,7 +19,7 @@ import {
 } from './geom';
 
 expect.extend({
-  toMatchCloseTo(received, expected) {
+  toMatchCloseTo(received, expected, margin=0.000001) {
     for (let kk in expected) {
       if (!received.hasOwnProperty(kk)) {
         //console.log("missing prop:",kk);
@@ -28,12 +29,11 @@ expect.extend({
           pass: false,
         };
       } else {
-        let err = expected[kk] - received[kk];
-        if (err > 0.000001) {
-          //console.log("has prop but off:",kk, err);
+        let err = Math.abs(expected[kk] - received[kk]);
+        if (err > margin) {
           return {
             message: () =>
-              `expected ${received}.${kk} to be close to ${expected[kk]}`,
+              `expected attribute ${kk} ${received[kk]} to be within ${margin} of ${expected[kk]}`,
             pass: false,
           };
         }
@@ -86,23 +86,47 @@ describe("converting frames of reference", () => {
   });
 });
 
-describe("Making velocities", () => {
-  it('make a velocity North', () => {
-    let crs = 0, spd = 5;
-    let exp = {vx:0,vy:5};
-    expect(mkVel(crs,spd)).toMatchCloseTo(exp);
+describe("Courses, speeds, and velocities", () => {
+  describe("Making velocities", () => {
+    it('make a velocity North', () => {
+      let crs = 0, spd = 5;
+      let exp = {vx:0,vy:5};
+      expect(mkVel(crs,spd)).toMatchCloseTo(exp);
+    });
+    it('make a velocity East', () => {
+      let crs = 90, spd = 5;
+      expect(mkVel(crs,spd)).toMatchCloseTo({vx:5,vy:0});
+    });
+    it('make a velocity South', () => {
+      let crs = 180, spd = 5;
+      expect(mkVel(crs,spd)).toMatchCloseTo({vx:0,vy:-5});
+    });
+    it('make a velocity West', () => {
+      let crs = 270, spd = 5;
+      expect(mkVel(crs,spd)).toMatchCloseTo({vx:-5,vy:0});
+    });
   });
-  it('make a velocity East', () => {
-    let crs = 90, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:5,vy:0});
-  });
-  it('make a velocity South', () => {
-    let crs = 180, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:0,vy:-5});
-  });
-  it('make a velocity West', () => {
-    let crs = 270, spd = 5;
-    expect(mkVel(crs,spd)).toMatchCloseTo({vx:-5,vy:0});
+  describe("Making courses and speeds", () => {
+    it('from a velocity North', () => {
+      let vel = {vx:0,vy:5};
+      let exp = {crs: 0, spd:  5};
+      expect(mkCrsSpd(vel)).toMatchCloseTo(exp);
+    });
+    it('from a velocity East', () => {
+      let vel = {vx:5,vy:0};
+      let exp = {crs: 90, spd:  5};
+      expect(mkCrsSpd(vel)).toMatchCloseTo(exp);
+    });
+    it('from a velocity North East', () => {
+      let vel = {vx:5,vy:5};
+      let exp = {crs: 45, spd: 5*Math.sqrt(2)};
+      expect(mkCrsSpd(vel)).toMatchCloseTo(exp);
+    });
+    it('from a velocity South West', () => {
+      let vel = {vx:-5,vy:-5};
+      let exp = {crs: 180+45, spd: 5*Math.sqrt(2)};
+      expect(mkCrsSpd(vel)).toMatchCloseTo(exp);
+    });
   });
 });
 
